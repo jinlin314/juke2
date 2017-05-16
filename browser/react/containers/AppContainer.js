@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Router, Route, hashHistory } from 'react-router';
 import axios from 'axios';
 
 import initialState from '../initialState';
@@ -110,7 +111,20 @@ export default class AppContainer extends Component {
         </div>
         <div className="col-xs-10">
         {
-          this.state.selectedAlbum.id ?
+            this.props.children ?
+                React.cloneElement(this.props.children, {
+                    album: this.state.selectedAlbum,
+                    currentSong: this.state.currentSong,
+                    isPlaying: this.state.isPlaying,
+                    toggle: this.toggleOne,
+
+                    albums: this.state.albums,
+                    selectAlbum: this.selectAlbum
+                })
+                :null
+
+          /*
+            this.state.selectedAlbum.id ?
           <Album
             album={this.state.selectedAlbum}
             currentSong={this.state.currentSong}
@@ -121,6 +135,7 @@ export default class AppContainer extends Component {
             albums={this.state.albums}
             selectAlbum={this.selectAlbum}
           />
+          */
         }
         </div>
         <Player

@@ -7,12 +7,10 @@ export default class Ablum extends React.Component {
     constructor(props){
         super(props);
         this.state ={};
-        console.log("props", this.props);
     }
 
 
     componentDidMount() {
-        // const selectedAlbum = this.props.selectedAlbum;
         const albumId = this.props.params.albumId;
         this.props.selectAlbum(albumId);
 

@@ -10,7 +10,7 @@ import Album from '../components/Album';
 import Sidebar from '../components/Sidebar';
 import Player from '../components/Player';
 
-import { convertAlbum, convertAlbums, skip } from '../utils';
+import { convertAlbum, convertAlbums, convertSong, skip } from '../utils';
 
 export default class AppContainer extends Component {
 
@@ -24,12 +24,21 @@ export default class AppContainer extends Component {
     this.prev = this.prev.bind(this);
     this.selectAlbum = this.selectAlbum.bind(this);
     this.deselectAlbum = this.deselectAlbum.bind(this);
+    this.selectArtist = this.selectArtist.bind(this);
+    this.getAlbums = this.getAlbums.bind(this);
+      this.getSongs = this.getSongs.bind(this);
   }
 
   componentDidMount () {
     axios.get('/api/albums/')
       .then(res => res.data)
       .then(album => this.onLoad(convertAlbums(album)));
+
+    // find all artists
+      axios.get('/api/artists/')
+          .then(res => res.data)
+          // .then(artists => this.onLoad(convertAlbums(album)));
+          .then(artists => this.setState({artists: artists}));
 
     AUDIO.addEventListener('ended', () =>
       this.next());
@@ -98,6 +107,31 @@ export default class AppContainer extends Component {
         selectedAlbum: convertAlbum(album)
       }));
   }
+    selectArtist (artistId) {
+        axios.get(`/api/artists/${artistId}`)
+            .then(res => res.data)
+            .then(artist => this.setState({
+                selectedArtist: artist
+            }));
+    }
+
+    getAlbums (artistId) {
+        axios.get(`/api/artists/${artistId}/albums`)
+            .then(res => res.data)
+            .then(albums => {
+                albums = albums.map(album => convertAlbum(album));
+                this.setState({artistAlbums: albums});
+            })
+    }
+
+    getSongs (artistId) {
+        axios.get(`/api/artists/${artistId}/songs`)
+            .then(res => res.data)
+            .then(songs => {
+                songs = songs.map(song => convertSong(song));
+                this.setState({songs: songs});
+            })
+    }
 
   deselectAlbum () {
     this.setState({ selectedAlbum: {}});
@@ -116,10 +150,19 @@ export default class AppContainer extends Component {
                     album: this.state.selectedAlbum,
                     currentSong: this.state.currentSong,
                     isPlaying: this.state.isPlaying,
-                    toggle: this.toggleOne,
+                    toggleOne: this.toggleOne,
+                    toggle: this.toggle,
 
                     albums: this.state.albums,
-                    selectAlbum: this.selectAlbum
+                    selectAlbum: this.selectAlbum,
+
+                    artists: this.state.artists,
+                    artist: this.state.selectedArtist,
+                    selectArtist: this.selectArtist, //function to select artist
+                    getSongs: this.getSongs,
+                    getAlbums: this.getAlbums,
+                    artistAlbums: this.state.artistAlbums,
+                    songs: this.state.songs
                 })
                 :null
 

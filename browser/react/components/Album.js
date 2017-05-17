@@ -17,10 +17,10 @@ export default class Ablum extends React.Component {
     }
 
  render(){
-     let album = this.props.album;
-     let currentSong = this.props.currentSong;
-     let isPlaying = this.props.isPlaying;
-     let toggleOne = this.props.toggleOne;
+     const album = this.props.album;
+     const currentSong = this.props.currentSong;
+     const isPlaying = this.props.isPlaying;
+     const toggleOne = this.props.toggleOne;
 
      return (
 

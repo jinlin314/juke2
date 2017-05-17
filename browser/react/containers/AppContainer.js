@@ -119,7 +119,7 @@ export default class AppContainer extends Component {
         axios.get(`/api/artists/${artistId}/albums`)
             .then(res => res.data)
             .then(albums => {
-                albums = albums.map(album => convertAlbum(album));
+                albums = albums.map(convertAlbum);
                 this.setState({artistAlbums: albums});
             })
     }
@@ -128,7 +128,7 @@ export default class AppContainer extends Component {
         axios.get(`/api/artists/${artistId}/songs`)
             .then(res => res.data)
             .then(songs => {
-                songs = songs.map(song => convertSong(song));
+                songs = songs.map(convertSong);
                 this.setState({songs: songs});
             })
     }

@@ -5,7 +5,6 @@ const Albums = (props) => {
 
   const albums = props.albums;
   const selectAlbum = props.selectAlbum;
-  console.log('!in album:',props.albums );
 
 
   return (

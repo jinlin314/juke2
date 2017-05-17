@@ -20,17 +20,17 @@ export default class Artist extends React.Component {
         this.props.getSongs(artistId);
     }
 
-    clickHandler(action){
-        this.setState({action: action});
-    }
-
     render(){
 
         const artist = this.props.artist;
         const albums = this.props.artistAlbums ||[];
+
         const children = this.props.children;
         const propsToPassToChildren = {
-            artist: this.props.artist,
+            artist: artist,
+            songs: this.props.songs,
+            albums: albums,
+            selectAlbum: this.props.getAlbums,
             currentSong: this.props.currentSong,
             isPlaying: this.props.isPlaying,
             toggleOne: this.props.toggleOne
@@ -39,23 +39,11 @@ export default class Artist extends React.Component {
         return(<div>
             <h3>{ artist.name }</h3>
             <ul className="nav nav-tabs">
-                <li><Link to={`/artists/${artist.id}/albums`} onClick = {() => this.clickHandler('albums')}>ALBUMS</Link></li>
-                <li><Link to={`/artists/${artist.id}/songs`} onClick = {() => this.clickHandler('songs')}>SONGS</Link></li>
+                <li><Link to={`/artists/${artist.id}/albums`} >ALBUMS</Link></li>
+                <li><Link to={`/artists/${artist.id}/songs`} >SONGS</Link></li>
             </ul>
             { children && React.cloneElement(children, propsToPassToChildren) }
-            {
-                (this.state.action === 'albums') ?
-                    (<Albums
-                        albums={albums}
-                        selectAlbum={this.props.getAlbums}
-                    />)
-                    : (<Songs
-                            songs={this.props.songs}
-                            currentSong={this.props.currentSong}
-                            isPlaying={this.props.isPlaying}
-                            toggleOne={this.props.toggleOne}
-                        />)
-            }
+
         </div>);
     }
 
